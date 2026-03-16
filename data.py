@@ -21,3 +21,10 @@ def fetch_stock_info(ticker: str) -> dict:
     except Exception:
         return {}
 
+
+def add_moving_averages(df: pd.DataFrame, windows: list[int]) -> pd.DataFrame:
+    df = df.copy()
+    for w in windows:
+        df[f"MA_{w}"] = df["Close"].rolling(w).mean()
+    return df
+

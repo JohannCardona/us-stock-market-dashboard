@@ -31,3 +31,33 @@ def make_candlestick_chart(
             decreasing_fillcolor="#e05252",
         )
     )
+
+    for w in ma_windows:
+        col = f"MA_{w}"
+        if col in df.columns:
+            fig.add_trace(
+                go.Scatter(
+                    x=df.index,
+                    y=df[col],
+                    mode="lines",
+                    name=f"MA {w}",
+                    line=dict(color=_MA_COLORS.get(w, "#ffffff"), width=1.5),
+                )
+            )
+
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor=_DARK_BG,
+        plot_bgcolor=_DARK_BG,
+        xaxis_rangeslider_visible=False,
+        margin=dict(l=10, r=10, t=40, b=10),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=500,
+        title=dict(text=f"{ticker} — Price", font=dict(size=16)),
+    )
+    rangebreaks = [dict(bounds=["sat", "mon"])] if interval == "1h" else []
+    fig.update_xaxes(showgrid=True, gridcolor=_GRID_COLOR, rangebreaks=rangebreaks)
+    fig.update_yaxes(showgrid=True, gridcolor=_GRID_COLOR, tickprefix="$")
+
+    return fig
+

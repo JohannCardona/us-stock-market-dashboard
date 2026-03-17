@@ -77,3 +77,24 @@ if df.empty:
 df = add_moving_averages(df, ma_windows)
 if show_bb:
     df = add_bollinger_bands(df)
+
+# ── Header ────────────────────────────────────────────────────────────────────
+company_name: str = info.get("longName", ticker)
+st.title(f"{company_name} ({ticker})")
+
+# ── Metrics Row ───────────────────────────────────────────────────────────────
+current_price: float = float(info.get("currentPrice") or df["Close"].iloc[-1])
+prev_close: float = float(info.get("previousClose") or (df["Close"].iloc[-2] if len(df) > 1 else current_price))
+day_change_pct: float = ((current_price - prev_close) / prev_close * 100) if prev_close else 0.0
+week52_high: float = float(info.get("fiftyTwoWeekHigh") or df["High"].max())
+week52_low: float = float(info.get("fiftyTwoWeekLow") or df["Low"].min())
+market_cap: int | None = info.get("marketCap")
+
+col1, col2, col3, col4, col5 = st.columns(5)
+col1.metric("Current Price", f"${current_price:,.2f}")
+col2.metric("Day Change", f"{day_change_pct:+.2f}%")
+col3.metric("52-Week High", f"${week52_high:,.2f}")
+col4.metric("52-Week Low", f"${week52_low:,.2f}")
+col5.metric("Market Cap", f"${market_cap / 1e9:.2f}B" if market_cap else "N/A")
+
+st.markdown("---")

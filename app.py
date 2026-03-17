@@ -59,3 +59,21 @@ if not ticker:
 if start_date >= end_date:
     st.error("Start date must be before end date.")
     st.stop()
+
+# ── Data ──────────────────────────────────────────────────────────────────────
+ma_windows = [w for w, show in [(20, show_ma20), (40, show_ma40), (100, show_ma100), (200, show_ma200)] if show]
+
+with st.spinner(f"Fetching data for {ticker}…"):
+    df = fetch_stock_data(ticker, str(start_date), str(end_date), interval)
+    info = fetch_stock_info(ticker)
+
+if df.empty:
+    st.error(
+        f"No data found for **{ticker}**. "
+        "Check the ticker symbol (e.g. AAPL, TSLA, BTC-USD) and date range."
+    )
+    st.stop()
+
+df = add_moving_averages(df, ma_windows)
+if show_bb:
+    df = add_bollinger_bands(df)

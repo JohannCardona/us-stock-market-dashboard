@@ -98,3 +98,10 @@ col4.metric("52-Week Low", f"${week52_low:,.2f}")
 col5.metric("Market Cap", f"${market_cap / 1e9:.2f}B" if market_cap else "N/A")
 
 st.markdown("---")
+
+# ── Charts ────────────────────────────────────────────────────────────────────
+candlestick_fig = make_candlestick_chart(df, ticker, ma_windows, show_bb, interval)
+st.plotly_chart(candlestick_fig, width="stretch")
+
+volume_fig = make_volume_chart(df)
+st.plotly_chart(volume_fig, width="stretch")

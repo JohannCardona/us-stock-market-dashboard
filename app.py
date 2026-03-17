@@ -50,3 +50,12 @@ with st.sidebar:
 
     st.markdown("---")
     st.caption("Data provided by Yahoo Finance via yfinance.")
+
+# ── Validation ────────────────────────────────────────────────────────────────
+if not ticker:
+    st.warning("Enter a ticker symbol in the sidebar.")
+    st.stop()
+
+if start_date >= end_date:
+    st.error("Start date must be before end date.")
+    st.stop()

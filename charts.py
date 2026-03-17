@@ -61,3 +61,44 @@ def make_candlestick_chart(
 
     return fig
 
+
+def make_volume_chart(df: pd.DataFrame) -> go.Figure:
+    colors = [
+        "#26a641" if float(c) >= float(o) else "#e05252"
+        for c, o in zip(df["Close"], df["Open"])
+    ]
+    volume_ma50 = df["Volume"].rolling(50).mean()
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=df.index,
+            y=df["Volume"],
+            marker_color=colors,
+            name="Volume",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df.index,
+            y=volume_ma50,
+            mode="lines",
+            name="Vol MA 50",
+            line=dict(color="#d4dbe6", width=1.5),
+        )
+    )
+
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor=_DARK_BG,
+        plot_bgcolor=_DARK_BG,
+        margin=dict(l=10, r=10, t=10, b=10),
+        height=200,
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        title=dict(text="Volume", font=dict(size=13)),
+    )
+    fig.update_xaxes(showgrid=True, gridcolor=_GRID_COLOR)
+    fig.update_yaxes(showgrid=True, gridcolor=_GRID_COLOR)
+
+    return fig

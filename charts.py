@@ -45,6 +45,39 @@ def make_candlestick_chart(
                 )
             )
 
+    if show_bb and "BB_lower" in df.columns:
+        fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df["BB_lower"],
+                mode="lines",
+                name="BB Lower",
+                line=dict(color="rgba(6, 182, 212, 0.4)", width=1),
+                showlegend=False,
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df["BB_upper"],
+                mode="lines",
+                name="Bollinger Bands",
+                line=dict(color="rgba(6, 182, 212, 0.4)", width=1),
+                fill="tonexty",
+                fillcolor="rgba(6, 182, 212, 0.07)",
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df["BB_mid"],
+                mode="lines",
+                name="BB Mid",
+                line=dict(color="rgba(6, 182, 212, 0.8)", width=1, dash="dot"),
+                showlegend=False,
+            )
+        )
+
     fig.update_layout(
         template="plotly_dark",
         paper_bgcolor=_DARK_BG,

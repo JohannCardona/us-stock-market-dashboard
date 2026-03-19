@@ -28,3 +28,11 @@ def add_moving_averages(df: pd.DataFrame, windows: list[int]) -> pd.DataFrame:
         df[f"MA_{w}"] = df["Close"].rolling(w).mean()
     return df
 
+
+def add_bollinger_bands(df: pd.DataFrame, window: int = 20, num_std: float = 2.0) -> pd.DataFrame:
+    df = df.copy()
+    rolling = df["Close"].rolling(window)
+    df["BB_mid"] = rolling.mean()
+    df["BB_upper"] = df["BB_mid"] + num_std * rolling.std()
+    df["BB_lower"] = df["BB_mid"] - num_std * rolling.std()
+    return df

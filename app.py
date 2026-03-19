@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import date, timedelta
 
-from data import fetch_stock_data, fetch_stock_info, add_moving_averages
+from data import fetch_stock_data, fetch_stock_info, add_moving_averages, add_bollinger_bands
 from charts import make_candlestick_chart, make_volume_chart
 
 st.set_page_config(
@@ -42,6 +42,7 @@ with st.sidebar:
 
     st.markdown("---")
     st.subheader("Indicators")
+    show_bb = st.checkbox("Bollinger Bands (20, 2)", value=False)
     st.subheader("Moving Averages")
     show_ma20 = st.checkbox("MA 20", value=True)
     show_ma40 = st.checkbox("MA 40", value=True)
